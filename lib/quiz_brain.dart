@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:quizzler/question.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class QuizBrain {
 
@@ -32,9 +34,16 @@ class QuizBrain {
         questionAnswer: true),
   ];
 
-  void nextQuestion() {
+
+  List<Widget> scoreKeeper = [];
+
+  void nextQuestion(BuildContext context) {
     if (_questionNumber < _questions.length - 1) {
       _questionNumber++;
+    } else {
+      Alert(context: context, title: 'You have reached the final question. All questions will be reset').show();
+      _questionNumber = 0;
+      scoreKeeper.clear();
     }
   }
 

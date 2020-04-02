@@ -26,8 +26,6 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Widget> scoreKeeper = [];
-
   QuizBrain quizBrain = QuizBrain();
 
   @override
@@ -67,22 +65,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
-
-                bool correctAnswer = quizBrain.getQuestionAnswer();
-
-                if(correctAnswer) {
-                  scoreKeeper.add(
-                    Icon(Icons.check, color: Colors.green)
-                  );
-                } else {
-                  scoreKeeper.add(
-                    Icon(Icons.close, color: Colors.red)
-                  );
-                }
-
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -101,30 +84,33 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 // The user picked false.
-                bool correctAnswer = quizBrain.getQuestionAnswer();
-
-                if(!correctAnswer) {
-                  scoreKeeper.add(
-                    Icon(Icons.check, color: Colors.green)
-                  );
-                } else {
-                  scoreKeeper.add(
-                    Icon(Icons.close, color: Colors.red)
-                  );
-                }
-
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(false);
               },
             ),
           ),
         ),
         Row(
-          children: scoreKeeper,
+          children: quizBrain.scoreKeeper,
         )
       ],
     );
+  }
+
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAnswer = quizBrain.getQuestionAnswer();
+    if(userPickedAnswer == correctAnswer) {
+      quizBrain.scoreKeeper.add(
+        Icon(Icons.check, color: Colors.green)
+      );
+    } else {
+      quizBrain.scoreKeeper.add(
+        Icon(Icons.close, color: Colors.red)
+      );
+    }
+
+    setState(() {
+      quizBrain.nextQuestion(context);
+    });
   }
 }
 
